@@ -1,0 +1,19 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  healthcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Start services
+        run: docker compose up -d --build db redis api
+      - name: Test health endpoint
+        run: ./scripts/test_health.sh
+      - name: Stop services
+        if: always()
+        run: docker compose down
