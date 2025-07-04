@@ -14,6 +14,7 @@ services:
     build: ./client
     ports:
       - "3000:3000"
+      - "19006:19006"
     environment:
       - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
     depends_on:
