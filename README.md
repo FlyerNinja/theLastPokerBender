@@ -49,6 +49,7 @@ Default set: **1 – 2 – 3 – 5 – 8 – 13 – 21�
 | **API**           | Node.js (NestJS)                 |
 | **DB**            | PostgreSQL (Prisma ORM)          |
 | **Cache/Pub‑Sub** | Redis                            |
+| **DB Admin**      | PgAdmin                          |
 | **Auth**          | JWT + email magic‑link           |
 | **Containers**    | Docker Compose                   |
 
@@ -115,6 +116,10 @@ services:
     volumes: ["db_data:/var/lib/postgresql/data"]
   redis:
     image: redis:7-alpine
+  db-admin:
+    image: dpage/pgadmin4
+    ports: ["8080:80"]
+    depends_on: [db]
 volumes:
   db_data:
 ```
@@ -156,8 +161,11 @@ A `docker-compose.yml` is provided to spin up all services:
 docker compose up --build
 ```
 
-This brings up the NestJS API, the Expo client, PostgreSQL and Redis.
+This brings up the NestJS API, the Expo client, PostgreSQL, Redis and the PgAdmin
+database manager.
 The client is served on [http://localhost:3000](http://localhost:3000) and the API on [http://localhost:4000](http://localhost:4000).
+PgAdmin is reachable on [http://localhost:8080](http://localhost:8080).
+Use **admin@example.com** / **adminpass** to log in.
 
 
 When running the client outside of Docker, make sure the web dependencies are installed:
