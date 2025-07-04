@@ -13,6 +13,20 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 20
+      - name: Cache backend dependencies
+        uses: actions/cache@v3
+        with:
+          path: backend/node_modules
+          key: backend-node-${{ runner.os }}-${{ hashFiles('backend/package.json') }}
+          restore-keys: |
+            backend-node-${{ runner.os }}-
+      - name: Cache client dependencies
+        uses: actions/cache@v3
+        with:
+          path: client/node_modules
+          key: client-node-${{ runner.os }}-${{ hashFiles('client/package.json') }}
+          restore-keys: |
+            client-node-${{ runner.os }}-
       - name: Install and build backend
         working-directory: backend
         run: |
