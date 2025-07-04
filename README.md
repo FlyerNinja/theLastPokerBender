@@ -1,4 +1,4 @@
-# the last pokerbernder – Design Blueprint
+# the last pokerbender – Design Blueprint
 
 ## 1. Vision
 
