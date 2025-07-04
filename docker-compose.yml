@@ -30,5 +30,14 @@ services:
       - ./db/init:/docker-entrypoint-initdb.d:ro
   redis:
     image: redis:7-alpine
+  db-admin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: adminpass
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
 volumes:
   db_data:
