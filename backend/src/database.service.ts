@@ -9,10 +9,10 @@ export class DatabaseService implements OnModuleDestroy {
     this.pool = new Pool({ connectionString: process.env.DATABASE_URL });
   }
 
-  async query(sql: string) {
+  async query(sql: string, params?: any[]) {
     const client = await this.pool.connect();
     try {
-      return await client.query(sql);
+      return await client.query(sql, params);
     } finally {
       client.release();
     }
