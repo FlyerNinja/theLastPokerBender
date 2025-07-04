@@ -106,7 +106,7 @@ services:
     depends_on: [db, redis]
   client:
     build: ./client
-    ports: ["19006:19006"]  # Expo web
+    ports: ["3000:3000"]  # Expo web
     depends_on: [api]
   db:
     image: postgres:16-alpine
@@ -157,4 +157,4 @@ docker compose up --build
 ```
 
 This brings up the NestJS API, the Expo client, PostgreSQL and Redis.
-The client is served on [http://localhost:19006](http://localhost:19006) and the API on [http://localhost:4000](http://localhost:4000).
+The client is served on [http://localhost:3000](http://localhost:3000) and the API on [http://localhost:4000](http://localhost:4000).
