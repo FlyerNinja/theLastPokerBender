@@ -159,6 +159,7 @@ docker compose up --build
 This brings up the NestJS API, the Expo client, PostgreSQL and Redis.
 The client is served on [http://localhost:3000](http://localhost:3000) and the API on [http://localhost:4000](http://localhost:4000).
 
+
 When running the client outside of Docker, make sure the web dependencies are installed:
 
 ```bash
