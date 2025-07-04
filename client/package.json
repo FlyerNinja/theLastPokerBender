@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "expo start --dev-client"
+    "start": "expo start --web --port 3000",
+    "build": "tsc"
   },
   "dependencies": {
     "expo": "^49.0.0",
