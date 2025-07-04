@@ -147,3 +147,14 @@ volumes:
 * Conventional Commits
 * ESLint + Prettier + Husky
 * CI: GitHub Actions
+
+## 14. Local Development
+
+A `docker-compose.yml` is provided to spin up all services:
+
+```bash
+docker compose up --build
+```
+
+This brings up the NestJS API, the Expo client, PostgreSQL and Redis.
+The client is served on [http://localhost:19006](http://localhost:19006) and the API on [http://localhost:4000](http://localhost:4000).
