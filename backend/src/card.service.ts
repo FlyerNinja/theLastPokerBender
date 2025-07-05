@@ -94,4 +94,11 @@ export class CardService {
     await this.log(id, userId, 'assign_weight', { weight });
     return this.getCard(id);
   }
+
+  /**
+   * Public helper used outside HTTP controllers to log arbitrary card actions.
+   */
+  async recordAction(cardId: number, userId: number, action: string, details: any) {
+    await this.log(cardId, userId, action, details);
+  }
 }
