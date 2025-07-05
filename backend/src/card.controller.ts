@@ -21,6 +21,11 @@ export class CardController {
     return this.cards.getCard(Number(id));
   }
 
+  @Get(':id/logs')
+  logs(@Param('id') id: string) {
+    return this.cards.getCardLogs(Number(id));
+  }
+
   @Put(':id')
   update(@Param('id') id: string, @Body() body: any) {
     const { userId, ...fields } = body;
