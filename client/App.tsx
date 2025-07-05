@@ -4,10 +4,12 @@ import HomeScreen from './screens/HomeScreen';
 import SubmitCardScreen from './screens/SubmitCardScreen';
 import CardsListScreen from './screens/CardsListScreen';
 import CardLogsScreen from './screens/CardLogsScreen';
+import PokerRoomScreen from './screens/PokerRoomScreen';
+import ScoresScreen from './screens/ScoresScreen';
 
 export default function App() {
   const [user, setUser] = useState<{ email: string; id: number } | null>(null);
-  const [screen, setScreen] = useState<'login' | 'home' | 'submit' | 'cards' | 'logs'>('login');
+  const [screen, setScreen] = useState<'login' | 'home' | 'submit' | 'cards' | 'logs' | 'room' | 'scores'>('login');
   const [logCardId, setLogCardId] = useState<number | null>(null);
 
   function handleLogin(u: { email: string; id: number }) {
@@ -44,11 +46,21 @@ export default function App() {
     );
   }
 
+  if (screen === 'room') {
+    return <PokerRoomScreen userId={user.id} onBack={() => setScreen('home')} />;
+  }
+
+  if (screen === 'scores') {
+    return <ScoresScreen onBack={() => setScreen('home')} />;
+  }
+
   return (
     <HomeScreen
       email={user.email}
       onSubmitCard={() => setScreen('submit')}
       onShowCards={() => setScreen('cards')}
+      onEnterRoom={() => setScreen('room')}
+      onShowScores={() => setScreen('scores')}
     />
   );
 }

@@ -6,10 +6,14 @@ export default function HomeScreen({
   email,
   onSubmitCard,
   onShowCards,
+  onEnterRoom,
+  onShowScores,
 }: {
   email: string;
   onSubmitCard: () => void;
   onShowCards: () => void;
+  onEnterRoom: () => void;
+  onShowScores: () => void;
 }) {
   return (
     <View style={styles.container}>
@@ -17,6 +21,10 @@ export default function HomeScreen({
       <Button title="Submit Card" onPress={onSubmitCard} color={theme.accent} />
       <View style={{ height: 12 }} />
       <Button title="View Cards" onPress={onShowCards} color={theme.accent} />
+      <View style={{ height: 12 }} />
+      <Button title="Enter Room" onPress={onEnterRoom} color={theme.accent} />
+      <View style={{ height: 12 }} />
+      <Button title="Scores" onPress={onShowScores} color={theme.accent} />
     </View>
   );
 }
