@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Alert } from 'react-native';
+import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
+import { API_URL } from '../api';
+import { theme } from '../theme';
 
 export default function SubmitCardScreen({ userId, onDone }: { userId: number; onDone: () => void }) {
   const [title, setTitle] = useState('');
@@ -7,7 +9,7 @@ export default function SubmitCardScreen({ userId, onDone }: { userId: number; o
 
   async function handleSubmit() {
     try {
-      const res = await fetch('http://localhost:4000/cards', {
+      const res = await fetch(`${API_URL}/cards`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId, title, description }),
@@ -23,21 +25,41 @@ export default function SubmitCardScreen({ userId, onDone }: { userId: number; o
   }
 
   return (
-    <View style={{ flex: 1, padding: 20 }}>
-      <Text style={{ fontSize: 24, marginBottom: 20 }}>Submit Card</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Submit Card</Text>
       <TextInput
         placeholder="Title"
         value={title}
         onChangeText={setTitle}
-        style={{ borderWidth: 1, marginBottom: 12, padding: 8 }}
+        style={styles.input}
       />
       <TextInput
         placeholder="Description"
         value={description}
         onChangeText={setDescription}
-        style={{ borderWidth: 1, marginBottom: 12, padding: 8 }}
+        style={styles.input}
       />
-      <Button title="Submit" onPress={handleSubmit} />
+      <Button title="Submit" onPress={handleSubmit} color={theme.accent} />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: theme.background,
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 20,
+    color: theme.text,
+  },
+  input: {
+    borderWidth: 1,
+    marginBottom: 12,
+    padding: 8,
+    borderColor: theme.accent,
+    color: theme.text,
+  },
+});
