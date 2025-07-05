@@ -32,6 +32,14 @@ export class CardService {
     return result.rows[0];
   }
 
+  async getCardLogs(id: number) {
+    const result = await this.db.query(
+      'SELECT * FROM card_logs WHERE card_id = $1 ORDER BY id',
+      [id],
+    );
+    return result.rows;
+  }
+
   async updateCard(id: number, userId: number, fields: any) {
     const updates = [] as string[];
     const params = [] as any[];
