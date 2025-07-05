@@ -22,15 +22,17 @@ export default function LoginScreen({ onLogin }: { onLogin: (user: { id: number;
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
-      <TextInput
-        placeholder="Email"
-        autoCapitalize="none"
-        value={email}
-        onChangeText={setEmail}
-        style={styles.input}
-      />
-      <Button title="Login" onPress={handleLogin} color={theme.accent} />
+      <View style={styles.dialog}>
+        <Text style={styles.title}>Login</Text>
+        <TextInput
+          placeholder="Email"
+          autoCapitalize="none"
+          value={email}
+          onChangeText={setEmail}
+          style={styles.input}
+        />
+        <Button title="Login" onPress={handleLogin} color={theme.accent} />
+      </View>
     </View>
   );
 }
@@ -39,8 +41,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    padding: 20,
+    alignItems: 'center',
     backgroundColor: theme.background,
+  },
+  dialog: {
+    width: '80%',
+    padding: 20,
+    backgroundColor: theme.card,
+    borderRadius: 8,
   },
   title: {
     fontSize: 24,
@@ -53,5 +61,6 @@ const styles = StyleSheet.create({
     padding: 8,
     borderColor: theme.accent,
     color: theme.text,
+    width: '100%',
   },
 });
