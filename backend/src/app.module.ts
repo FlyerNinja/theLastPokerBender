@@ -8,6 +8,7 @@ import { CardService } from './card.service';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { ScoreController } from './score.controller';
+import { KpiController } from './kpi.controller';
 
 @Module({
   controllers: [
@@ -16,6 +17,7 @@ import { ScoreController } from './score.controller';
     CardController,
     UserController,
     ScoreController,
+    KpiController,
   ],
   providers: [AppService, DatabaseService, CardService, UserService],
 })

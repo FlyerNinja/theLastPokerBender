@@ -3,28 +3,49 @@ import { View, Text, Button, FlatList, StyleSheet } from 'react-native';
 import { API_URL } from '../api';
 import { theme } from '../theme';
 
-interface Score { user_id: number; points: number }
+interface UserKpi {
+  id: number;
+  email: string;
+  display_name: string | null;
+  score: number;
+  cards_created: number;
+  votes: number;
+}
+
+interface Summary {
+  team: { total_cards: number; total_votes: number };
+  users: UserKpi[];
+}
 
 export default function ScoresScreen({ onBack }: { onBack: () => void }) {
-  const [scores, setScores] = useState<Score[]>([]);
+  const [summary, setSummary] = useState<Summary | null>(null);
 
   useEffect(() => {
-    fetch(`${API_URL}/scores`)
+    fetch(`${API_URL}/kpi/summary`)
       .then((res) => res.json())
-      .then(setScores)
+      .then(setSummary)
       .catch(() => {});
   }, []);
 
   return (
     <View style={styles.container}>
       <Button title="Back" onPress={onBack} color={theme.accent} />
+      {summary && (
+        <View style={styles.row}>
+          <Text style={styles.text}>
+            Team Cards: {summary.team.total_cards} | Votes: {summary.team.total_votes}
+          </Text>
+        </View>
+      )}
       <FlatList
         style={{ marginTop: 10 }}
-        data={scores}
-        keyExtractor={(i) => i.user_id.toString()}
+        data={summary?.users || []}
+        keyExtractor={(i) => i.id.toString()}
         renderItem={({ item }) => (
           <View style={styles.row}>
-            <Text style={styles.text}>User {item.user_id}: {item.points}</Text>
+            <Text style={styles.text}>
+              {item.email} - Score {item.score} - Created {item.cards_created} - Votes {item.votes}
+            </Text>
           </View>
         )}
       />
