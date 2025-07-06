@@ -2,8 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { initRoom, getRoomState } from './room.state';
 import { CardService } from './card.service';
-
-const { WebSocketServer } = require('../../client/node_modules/ws');
+import { WebSocketServer } from 'ws';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
