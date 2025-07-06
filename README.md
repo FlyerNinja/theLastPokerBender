@@ -76,6 +76,7 @@ Vote(id, session_id, card_id, participant_id, value, created_at)
 | POST   | /sessions/\:id/join   | Join session                  |
 | POST   | /sessions/\:id/vote   | Cast vote                     |
 | POST   | /sessions/\:id/reveal | Reveal votes                  |
+| GET    | /users                | List users                    |
 | GET    | /kpi/summary          | Aggregate KPIs                |
 
 ### WebSocket Events

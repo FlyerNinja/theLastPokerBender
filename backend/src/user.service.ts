@@ -13,4 +13,9 @@ export class UserService {
     const insert = await this.db.query('INSERT INTO users (email) VALUES ($1) RETURNING *', [email]);
     return insert.rows[0];
   }
+
+  async getAllUsers() {
+    const result = await this.db.query('SELECT * FROM users ORDER BY id');
+    return result.rows;
+  }
 }
