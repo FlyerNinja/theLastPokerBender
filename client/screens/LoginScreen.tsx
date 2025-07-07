@@ -3,7 +3,11 @@ import { View, TextInput, Button, Text, Alert, StyleSheet } from 'react-native';
 import { API_URL } from '../api';
 import { theme } from '../theme';
 
-export default function LoginScreen({ onLogin }: { onLogin: (user: { id: number; email: string }) => void }) {
+export default function LoginScreen({
+  onLogin,
+}: {
+  onLogin: (user: { id: number; email: string; fibonacci: number[] }) => void;
+}) {
   const [email, setEmail] = useState('');
 
   async function handleLogin() {

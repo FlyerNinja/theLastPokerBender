@@ -8,11 +8,14 @@ import PokerRoomScreen from './screens/PokerRoomScreen';
 import ScoresScreen from './screens/ScoresScreen';
 
 export default function App() {
-  const [user, setUser] = useState<{ email: string; id: number } | null>(null);
+  const [user, setUser] = useState<
+    | { email: string; id: number; fibonacci: number[] }
+    | null
+  >(null);
   const [screen, setScreen] = useState<'login' | 'home' | 'submit' | 'cards' | 'logs' | 'room' | 'scores'>('login');
   const [logCardId, setLogCardId] = useState<number | null>(null);
 
-  function handleLogin(u: { email: string; id: number }) {
+  function handleLogin(u: { email: string; id: number; fibonacci: number[] }) {
     setUser(u);
     setScreen('home');
   }
@@ -47,7 +50,13 @@ export default function App() {
   }
 
   if (screen === 'room') {
-    return <PokerRoomScreen userId={user.id} onBack={() => setScreen('home')} />;
+    return (
+      <PokerRoomScreen
+        userId={user.id}
+        fibonacci={user.fibonacci}
+        onBack={() => setScreen('home')}
+      />
+    );
   }
 
   if (screen === 'scores') {

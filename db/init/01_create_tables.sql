@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     email TEXT NOT NULL,
     display_name TEXT,
+    fibonacci INT[] DEFAULT '{1,2,3,5,8,13}',
     created_at TIMESTAMPTZ DEFAULT now()
 );
 
