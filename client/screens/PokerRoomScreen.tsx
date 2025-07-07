@@ -2,9 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Button, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { theme } from '../theme';
 
-const FIB = [1, 2, 3, 5, 8, 13];
-
-export default function PokerRoomScreen({ userId, onBack }: { userId: number; onBack: () => void }) {
+export default function PokerRoomScreen({
+  userId,
+  fibonacci,
+  onBack,
+}: {
+  userId: number;
+  fibonacci: number[];
+  onBack: () => void;
+}) {
   const [table, setTable] = useState<any[]>([]);
   const [deckCount, setDeckCount] = useState(0);
   const [ws, setWs] = useState<WebSocket | null>(null);
@@ -59,7 +65,7 @@ export default function PokerRoomScreen({ userId, onBack }: { userId: number; on
           <View style={styles.card}>
             <Text style={styles.title}>{item.card.title}</Text>
             <View style={styles.row}>
-              {FIB.map((f) => (
+              {fibonacci.map((f) => (
                 <TouchableOpacity key={f} onPress={() => castVote(item.card.id, f)} style={styles.vote}>
                   <Text style={styles.voteText}>{f}</Text>
                 </TouchableOpacity>
