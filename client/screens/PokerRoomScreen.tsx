@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Button, FlatList, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import { theme } from '../theme';
 
 export default function PokerRoomScreen({
@@ -14,6 +14,8 @@ export default function PokerRoomScreen({
   const [table, setTable] = useState<any[]>([]);
   const [deckCount, setDeckCount] = useState(0);
   const [ws, setWs] = useState<WebSocket | null>(null);
+  const [chat, setChat] = useState<{ name: string; text: string; system?: boolean }[]>([]);
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     const socket = new WebSocket('ws://localhost:4000/room');
@@ -36,6 +38,10 @@ export default function PokerRoomScreen({
         );
       } else if (msg.type === 'end') {
         setTable([]);
+      } else if (msg.type === 'chat') {
+        setChat((c) => [...c, { name: msg.name, text: msg.text }]);
+      } else if (msg.type === 'log') {
+        setChat((c) => [...c, { name: '', text: msg.text, system: true }]);
       }
     };
     setWs(socket);
@@ -50,6 +56,13 @@ export default function PokerRoomScreen({
 
   function castVote(cardId: number, value: number) {
     ws?.send(JSON.stringify({ type: 'vote', cardId, userId, value }));
+  }
+
+  function sendChat() {
+    if (message.trim()) {
+      ws?.send(JSON.stringify({ type: 'chat', text: message.trim(), userId }));
+      setMessage('');
+    }
   }
 
   return (
@@ -75,6 +88,29 @@ export default function PokerRoomScreen({
           </View>
         )}
       />
+      <View style={styles.chatContainer}>
+        <ScrollView style={styles.chatLog}
+          contentContainerStyle={{ paddingBottom: 10 }}
+        >
+          {chat.map((c, i) => (
+            <Text key={i} style={c.system ? styles.logText : styles.chatText}>
+              {c.system ? c.text : `${c.name}: ${c.text}`}
+            </Text>
+          ))}
+        </ScrollView>
+        <View style={styles.chatRow}>
+          <TextInput
+            style={styles.chatInput}
+            placeholder="message"
+            placeholderTextColor="#00ff00"
+            value={message}
+            onChangeText={setMessage}
+          />
+          <TouchableOpacity onPress={sendChat} style={styles.sendBtn}>
+            <Text style={styles.sendText}>Send</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </View>
   );
 }
@@ -87,4 +123,12 @@ const styles = StyleSheet.create({
   vote: { backgroundColor: theme.card, padding: 6, marginRight: 6 },
   voteText: { color: theme.text },
   title: { color: theme.text, fontWeight: 'bold' },
+  chatContainer: { flex: 1, marginTop: 20, backgroundColor: '#000' },
+  chatLog: { flex: 1, padding: 10 },
+  chatText: { color: '#0f0', marginBottom: 4 },
+  logText: { color: '#0f0', fontStyle: 'italic', marginBottom: 4 },
+  chatRow: { flexDirection: 'row', padding: 6, borderTopWidth: 1, borderColor: '#0f0' },
+  chatInput: { flex: 1, color: '#0f0', borderWidth: 1, borderColor: '#0f0', padding: 4, marginRight: 6 },
+  sendBtn: { backgroundColor: '#0f0', padding: 6 },
+  sendText: { color: '#000' },
 });

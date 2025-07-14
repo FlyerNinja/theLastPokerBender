@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { initRoom, getRoomState } from './room.state';
 import { CardService } from './card.service';
+import { UserService } from './user.service';
 import { WebSocketServer } from 'ws';
 
 async function bootstrap() {
@@ -10,6 +11,7 @@ async function bootstrap() {
     app.enableCors();
   }
   await initRoom(app.get(CardService));
+  const users = app.get(UserService);
 
   const server = app.getHttpServer();
   const wss = new WebSocketServer({ noServer: true });
@@ -21,6 +23,10 @@ async function bootstrap() {
       if (!room) return;
       if (msg.type === 'join') {
         ws.userId = msg.userId;
+        const user = await users.getUserById(msg.userId);
+        const name = user?.display_name || user?.email || `User ${msg.userId}`;
+        const payload = JSON.stringify({ type: 'log', text: `${name} entered the chat` });
+        wss.clients.forEach((c: any) => c.send(payload));
         ws.send(JSON.stringify({ type: 'state', ...room.getState() }));
       } else if (msg.type === 'draw') {
         const card = room.drawCard();
@@ -34,9 +40,23 @@ async function bootstrap() {
         await room.cardService.recordAction(msg.cardId, msg.userId, 'vote', { value: msg.value });
         const payload = JSON.stringify({ type: 'vote', cardId: msg.cardId, userId: msg.userId, value: msg.value });
         wss.clients.forEach((c: any) => c.send(payload));
+      } else if (msg.type === 'chat') {
+        const user = await users.getUserById(msg.userId);
+        const name = user?.display_name || user?.email || `User ${msg.userId}`;
+        const payload = JSON.stringify({ type: 'chat', userId: msg.userId, name, text: msg.text });
+        wss.clients.forEach((c: any) => c.send(payload));
       } else if (msg.type === 'end') {
         room.endSession();
         const payload = JSON.stringify({ type: 'end' });
+        wss.clients.forEach((c: any) => c.send(payload));
+      }
+    });
+
+    ws.on('close', async () => {
+      if (ws.userId) {
+        const user = await users.getUserById(ws.userId);
+        const name = user?.display_name || user?.email || `User ${ws.userId}`;
+        const payload = JSON.stringify({ type: 'log', text: `${name} left the chat` });
         wss.clients.forEach((c: any) => c.send(payload));
       }
     });
